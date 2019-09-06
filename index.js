@@ -14,6 +14,9 @@ app.set('view engine', 'hbs');
 // Set a folder with templates
 app.set('views', 'views');
 
+// Set static folder
+app.use(express.static('public'));
+
 app.get('/', (req, res) => {
    res.render('index');
 });
