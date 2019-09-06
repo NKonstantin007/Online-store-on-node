@@ -21,11 +21,12 @@ app.set('views', 'views');
 app.use(express.static('public'));
 
 // Routing
+app.use(express.urlencoded({extended: true}));
 app.use('/', homeRoutes);
 app.use('/courses', coursesRoutes);
 app.use('/add', addRoutes);
 
-const PORT = process.env.PORT || 3002
+const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
     console.log('Server is running on port ', PORT);
