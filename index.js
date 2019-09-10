@@ -8,6 +8,7 @@ const coursesRoutes = require('./routes/courses');
 const addRoutes = require('./routes/add');
 const cardRoutes = require('./routes/card');
 const ordersRoutes = require('./routes/orders');
+const authRoutes = require('./routes/auth');
 // import models
 const User = require('./models/user');
 
@@ -20,6 +21,13 @@ const hbs = exhbs.create({
 });
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
+
+// Set static folder
+app.use('/', express.static(path.join(__dirname, 'public'), {
+    ndex: false, 
+    immutable: true, 
+    cacheControl: true
+}));
 
 // Set a folder with templates
 app.set('views', 'views');
@@ -35,9 +43,6 @@ app.use(async (req, res, next) => {
     }
 });
 
-// Set static folder
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Routing
 app.use(express.urlencoded({extended: true}));
 app.use('/', homeRoutes);
@@ -45,6 +50,7 @@ app.use('/courses', coursesRoutes);
 app.use('/add', addRoutes);
 app.use('/card', cardRoutes);
 app.use('/orders', ordersRoutes);
+app.use('/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000
 
