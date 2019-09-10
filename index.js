@@ -11,10 +11,9 @@ const addRoutes = require('./routes/add');
 const cardRoutes = require('./routes/card');
 const ordersRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
-// import models
-const User = require('./models/user');
 //import middlewares
 const varMiddleware = require('./middleware/variables');
+const userMiddleware = require('./middleware/user');
 
 const MONGODB_URI = 'mongodb+srv://kostya007:8QGK6xeChF6e0SJI@cluster0-f6fx9.mongodb.net/shop'
 const app = express();
@@ -54,6 +53,7 @@ app.use(session({
 }));
 
 app.use(varMiddleware);
+app.use(userMiddleware);
 
 // Routing
 app.use('/', homeRoutes);
