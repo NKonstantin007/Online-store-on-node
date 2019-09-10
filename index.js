@@ -2,6 +2,7 @@ const express = require('express');
 const exhbs = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
+const session = require('express-session');
 // import routes
 const homeRoutes = require('./routes/home');
 const coursesRoutes = require('./routes/courses');
@@ -11,6 +12,8 @@ const ordersRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
 // import models
 const User = require('./models/user');
+//import middlewares
+const varMiddleware = require('./middleware/variables');
 
 const app = express();
 
@@ -32,19 +35,29 @@ app.use('/', express.static(path.join(__dirname, 'public'), {
 // Set a folder with templates
 app.set('views', 'views');
 
-app.use(async (req, res, next) => {
-    try{
-        const user = await User.findById('5d75c85c5861852b11a90d1d');
-        req.user = user;
-        next();
-    }
-    catch(e) {
-        console.log(e);
-    }
-});
+/* Middlewares */
+// app.use(async (req, res, next) => {
+//     try{
+//         const user = await User.findById('5d75c85c5861852b11a90d1d');
+//         req.user = user;
+//         next();
+//     }
+//     catch(e) {
+//         console.log(e);
+//     }
+// });
+
+app.use(express.urlencoded({extended: true}));
+
+app.use(session({
+    secret: 'some secret value',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(varMiddleware);
 
 // Routing
-app.use(express.urlencoded({extended: true}));
 app.use('/', homeRoutes);
 app.use('/courses', coursesRoutes);
 app.use('/add', addRoutes);
@@ -62,17 +75,17 @@ async function start() {
             useFindAndModify: false
         });
 
-        const candidate = await User.findOne();
-        if(!candidate) {
-            const user = new User({
-                email: 'kostya.1998.nosarev@mail.ru', 
-                name: 'Kostya',
-                cart: {
-                    items: []
-                }
-            });
-            await user.save();
-        }
+        // const candidate = await User.findOne();
+        // if(!candidate) {
+        //     const user = new User({
+        //         email: 'kostya.1998.nosarev@mail.ru', 
+        //         name: 'Kostya',
+        //         cart: {
+        //             items: []
+        //         }
+        //     });
+        //     await user.save();
+        // }
         app.listen(PORT, () => {
             console.log('Server is running on port ', PORT);
         });
