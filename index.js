@@ -15,8 +15,9 @@ const authRoutes = require('./routes/auth');
 //import middlewares
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
+// import keys
+const keys = require('./keys');
 
-const MONGODB_URI = 'mongodb+srv://kostya007:8QGK6xeChF6e0SJI@cluster0-f6fx9.mongodb.net/shop'
 const app = express();
 
 // Register `hbs.engine` with the Express app.
@@ -29,7 +30,7 @@ app.set('view engine', 'hbs');
 
 // Set static folder
 app.use('/', express.static(path.join(__dirname, 'public'), {
-    ndex: false, 
+    index: false, 
     immutable: true, 
     cacheControl: true
 }));
@@ -40,14 +41,14 @@ app.set('views', 'views');
 // Create store session
 const store = new MongoStore({
     collection: 'sessions',
-    uri: MONGODB_URI
+    uri: keys.MONGODB_URI
 })
 
 /* Middlewares */
 app.use(express.urlencoded({extended: true}));
 
 app.use(session({
-    secret: 'some secret value',
+    secret: keys.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store
@@ -65,7 +66,7 @@ app.use('/card', cardRoutes);
 app.use('/orders', ordersRoutes);
 app.use('/auth', authRoutes);
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 
 async function start() {
     try {
