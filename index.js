@@ -3,6 +3,7 @@ const exhbs = require('express-handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const flash = require('connect-flash');
 const MongoStore = require('connect-mongodb-session')(session);
 // import routes
 const homeRoutes = require('./routes/home');
@@ -52,6 +53,7 @@ app.use(session({
     store
 }));
 
+app.use(flash());
 app.use(varMiddleware);
 app.use(userMiddleware);
 
