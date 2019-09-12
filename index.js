@@ -15,6 +15,7 @@ const authRoutes = require('./routes/auth');
 //import middlewares
 const varMiddleware = require('./middleware/variables');
 const userMiddleware = require('./middleware/user');
+const errorHandler = require('./middleware/error');
 // import keys
 const keys = require('./keys');
 
@@ -66,6 +67,8 @@ app.use('/add', addRoutes);
 app.use('/card', cardRoutes);
 app.use('/orders', ordersRoutes);
 app.use('/auth', authRoutes);
+// 404 rout
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000
 
