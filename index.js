@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const flash = require('connect-flash');
 const helmet = require('helmet');
+const compression = require('compression');
 const MongoStore = require('connect-mongodb-session')(session);
 // import routes
 const homeRoutes = require('./routes/home');
@@ -64,6 +65,7 @@ app.use(session({
 app.use(fileMiddleware.single('avatar'));
 app.use(flash());
 app.use(helmet())
+app.use(compression());
 app.use(varMiddleware);
 app.use(userMiddleware);
 
